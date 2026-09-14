@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Password Manager</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="login-box">
+
+        <div class="language">
+            <button id="englishButton">EN</button>
+            <span>|</span>
+            <button id="hebrewButton">עברית</button>
+        </div>
+
+        <div class="app-logo">
+            <div class="logo-mark">
+                ◈
+            </div>
+        </div>
+
+        <h1 id="mainTitle">
+            Password Manager
+        </h1>
+
+        <p class="subtitle" id="mainSubtitle">
+            Your data. Always safe.
+        </p>
+
+        <div class="input-group">
+
+            <label for="username" id="usernameLabel">
+                Username
+            </label>
+
+            <input
+                type="text"
+                id="username"
+                placeholder="Enter your username"
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label for="password" id="passwordLabel">
+                Master Password
+            </label>
+
+            <div class="password-box">
+
+                <input
+                    type="password"
+                    id="password"
+                    placeholder="Enter your master password"
+                >
+
+                <button
+                    type="button"
+                    class="show-password"
+                    id="showPasswordButton"
+                >
+                    Show
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="login-options">
+
+            <label class="remember">
+
+                <input
+                    type="checkbox"
+                    id="rememberCheckbox"
+                >
+
+                <span id="rememberText">
+                    Remember me
+                </span>
+
+            </label>
+
+            <a
+                href="forgot-password.html"
+                id="forgotPasswordLink"
+            >
+                Forgot password?
+            </a>
+
+        </div>
+
+        <button
+            id="loginButton"
+            class="main-button"
+        >
+            Log In →
+        </button>
+
+        <p id="loginMessage"></p>
+
+        <div class="divider">
+            <span id="orText">
+                OR
+            </span>
+        </div>
+
+        <p class="register-text">
+
+            <span id="noAccountText">
+                Don't have an account?
+            </span>
+
+            <a
+                href="register.html"
+                id="signUpLink"
+            >
+                Sign Up
+            </a>
+
+        </p>
+
+        <div
+            class="bottom-info"
+            id="bottomInfo"
+        >
+            Secure • Private • Always with you
+        </div>
+
+    </div>
+
+    <p
+        class="page-text"
+        id="pageText"
+    >
+        "A safer internet starts with you"
+    </p>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

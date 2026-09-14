@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Sign Up</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="login-box">
+
+        <div class="language">
+            <button id="englishButton">EN</button>
+            <span>|</span>
+            <button id="hebrewButton">עברית</button>
+        </div>
+
+        <a
+            href="index.html"
+            class="back-link"
+            id="backToLoginLink"
+        >
+            ← Back to Log In
+        </a>
+
+        <div class="app-logo">
+            <div class="logo-mark">
+                ◈
+            </div>
+        </div>
+
+        <h1 id="registerTitle">
+            Sign Up
+        </h1>
+
+        <p
+            class="subtitle"
+            id="registerSubtitle"
+        >
+            Create your secure account.
+        </p>
+
+        <div class="input-group">
+
+            <label
+                for="registerUsername"
+                id="registerUsernameLabel"
+            >
+                Username
+            </label>
+
+            <input
+                type="text"
+                id="registerUsername"
+                placeholder="Choose a username"
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label
+                for="registerEmail"
+                id="registerEmailLabel"
+            >
+                Email
+            </label>
+
+            <input
+                type="email"
+                id="registerEmail"
+                placeholder="Enter your email"
+            >
+
+        </div>
+
+        <div class="input-group">
+
+            <label
+                for="registerPassword"
+                id="registerPasswordLabel"
+            >
+                Master Password
+            </label>
+
+            <div class="password-box">
+
+                <input
+                    type="password"
+                    id="registerPassword"
+                    placeholder="Create a master password"
+                >
+
+                <button
+                    type="button"
+                    class="show-password"
+                    id="showRegisterPasswordButton"
+                >
+                    Show
+                </button>
+
+            </div>
+
+        </div>
+
+        <div class="input-group">
+
+            <label
+                for="confirmPassword"
+                id="confirmPasswordLabel"
+            >
+                Confirm Password
+            </label>
+
+            <div class="password-box">
+
+                <input
+                    type="password"
+                    id="confirmPassword"
+                    placeholder="Repeat your master password"
+                >
+
+                <button
+                    type="button"
+                    class="show-password"
+                    id="showConfirmPasswordButton"
+                >
+                    Show
+                </button>
+
+            </div>
+
+        </div>
+
+        <button
+            id="registerButton"
+            class="main-button"
+        >
+            Sign Up
+        </button>
+
+        <p id="registerMessage"></p>
+
+        <div class="divider">
+            <span id="orText">
+                OR
+            </span>
+        </div>
+
+        <p class="register-text">
+
+            <span id="alreadyAccountText">
+                Already have an account?
+            </span>
+
+            <a
+                href="index.html"
+                id="loginLink"
+            >
+                Log In
+            </a>
+
+        </p>
+
+        <div
+            class="bottom-info"
+            id="bottomInfo"
+        >
+            Strong encryption • Secure access
+        </div>
+
+    </div>
+
+    <script src="script.js"></script>
+
+</body>
+
+</html>

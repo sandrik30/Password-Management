@@ -1,0 +1,548 @@
+* {
+    box-sizing: border-box;
+}
+
+
+html {
+    margin: 0;
+    padding: 0;
+
+    min-height: 100%;
+
+    background-color: #0B0F19;
+
+    overscroll-behavior: none;
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+
+    min-height: 100vh;
+
+    font-family: Arial, sans-serif;
+
+    background:
+        radial-gradient(circle at 80% 10%, #172554 0%, transparent 30%),
+        radial-gradient(circle at 15% 85%, #111c38 0%, transparent 30%),
+        #0B0F19;
+
+    background-color: #0B0F19;
+
+    color: #E2E8F0;
+
+    display: flex;
+    flex-direction: column;
+
+    justify-content: center;
+    align-items: center;
+
+    overscroll-behavior: none;
+}
+
+
+/* Main card */
+
+.login-box {
+    width: 430px;
+
+    padding: 32px 36px;
+
+    background: rgba(15, 23, 42, 0.88);
+
+    border: 1px solid #263859;
+
+    border-radius: 24px;
+
+    box-shadow:
+        0 25px 70px rgba(0, 0, 0, 0.45);
+
+    position: relative;
+
+    animation: openCard 0.35s ease;
+}
+
+
+@keyframes openCard {
+
+    from {
+        opacity: 0;
+        transform: translateY(8px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+}
+
+
+/* Language */
+
+.language {
+    display: flex;
+
+    justify-content: flex-end;
+    align-items: center;
+
+    gap: 8px;
+
+    margin-bottom: 15px;
+
+    direction: ltr;
+
+    color: #7897c5;
+}
+
+
+.language button {
+    background: none;
+
+    border: none;
+
+    color: #9db9e5;
+
+    cursor: pointer;
+
+    font-size: 14px;
+
+    transition: 0.2s;
+}
+
+
+.language button:hover {
+    color: #E2E8F0;
+}
+
+
+/* Temporary brand mark */
+
+.app-logo {
+    display: flex;
+
+    justify-content: center;
+
+    margin-bottom: 22px;
+}
+
+
+.logo-mark {
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+
+    background:
+        linear-gradient(
+            145deg,
+            #182238,
+            #101827
+        );
+
+    border: 1px solid #3B82F6;
+
+    border-radius: 22px;
+
+    color: #8CB9FF;
+
+    font-size: 38px;
+
+    line-height: 1;
+
+    box-shadow:
+        0 0 30px rgba(59, 130, 246, 0.18),
+        inset 0 0 20px rgba(99, 102, 241, 0.08);
+}
+
+
+/* Titles */
+
+h1 {
+    margin: 0;
+
+    text-align: center;
+
+    font-size: 31px;
+
+    color: #E2E8F0;
+}
+
+
+.subtitle {
+    margin-top: 10px;
+    margin-bottom: 32px;
+
+    text-align: center;
+
+    color: #8fa1bd;
+
+    line-height: 1.5;
+}
+
+
+/* Inputs */
+
+.input-group {
+    margin-bottom: 18px;
+}
+
+
+.input-group label {
+    display: block;
+
+    margin-bottom: 7px;
+
+    font-size: 14px;
+
+    color: #b5c3d8;
+}
+
+
+.input-group input {
+    width: 100%;
+
+    padding: 14px 15px;
+
+    border: 1px solid #344664;
+
+    border-radius: 11px;
+
+    background-color: #171E2E;
+
+    color: #E2E8F0;
+
+    font-size: 15px;
+
+    outline: none;
+
+    transition: 0.2s;
+}
+
+
+.input-group input::placeholder {
+    color: #70809b;
+}
+
+
+.input-group input:focus {
+    border-color: #3B82F6;
+
+    box-shadow:
+        0 0 0 3px rgba(59, 130, 246, 0.12);
+}
+
+
+/* Password */
+
+.password-box {
+    position: relative;
+}
+
+
+.password-box input {
+    padding-right: 70px;
+}
+
+
+.show-password {
+    position: absolute;
+
+    right: 12px;
+    top: 50%;
+
+    transform: translateY(-50%);
+
+    border: none;
+
+    background: none;
+
+    color: #7fa9e8;
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.show-password:hover {
+    color: #E2E8F0;
+}
+
+
+/* Login options */
+
+.login-options {
+    display: flex;
+
+    justify-content: space-between;
+    align-items: center;
+
+    margin-top: 5px;
+    margin-bottom: 25px;
+
+    font-size: 14px;
+}
+
+
+.remember {
+    display: flex;
+
+    align-items: center;
+
+    gap: 7px;
+
+    color: #a6b4c9;
+}
+
+
+.remember input {
+    accent-color: #3B82F6;
+}
+
+
+/* Links */
+
+a {
+    color: #3B82F6;
+
+    text-decoration: none;
+}
+
+
+a:hover {
+    text-decoration: underline;
+}
+
+
+/* Buttons */
+
+.main-button {
+    width: 100%;
+
+    padding: 14px;
+
+    border: none;
+
+    border-radius: 11px;
+
+    color: white;
+
+    font-size: 16px;
+    font-weight: bold;
+
+    cursor: pointer;
+
+    background:
+        linear-gradient(
+            100deg,
+            #3B82F6,
+            #6366F1
+        );
+
+    transition: 0.2s;
+}
+
+
+.main-button:hover {
+    transform: translateY(-1px);
+
+    box-shadow:
+        0 8px 25px rgba(59, 130, 246, 0.25);
+}
+
+
+/* Divider */
+
+.divider {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin: 28px 0 22px;
+
+    color: #7183a0;
+
+    font-size: 12px;
+}
+
+
+.divider::before,
+.divider::after {
+    content: "";
+
+    flex: 1;
+
+    height: 1px;
+
+    background-color: #293a57;
+}
+
+
+/* Register */
+
+.register-text {
+    text-align: center;
+
+    color: #a6b4c9;
+
+    font-size: 14px;
+}
+
+
+/* Bottom text */
+
+.bottom-info {
+    margin-top: 55px;
+
+    text-align: center;
+
+    color: #5876a3;
+
+    font-size: 13px;
+}
+
+
+.page-text {
+    margin-top: 35px;
+
+    color: #6482ad;
+
+    font-size: 14px;
+
+    font-style: italic;
+}
+
+
+/* Messages */
+
+.success-message {
+    margin-top: 15px;
+
+    text-align: center;
+
+    color: #10B981;
+}
+
+
+.error-message {
+    margin-top: 15px;
+
+    text-align: center;
+
+    color: #EF4444;
+}
+
+
+/* Back */
+
+.back-link {
+    display: inline-block;
+
+    margin-bottom: 22px;
+
+    color: #b3c0d3;
+
+    font-size: 14px;
+}
+
+
+/* Recovery */
+
+.info-box {
+    margin-top: 28px;
+
+    padding: 18px;
+
+    border: 1px solid #263859;
+
+    border-radius: 12px;
+
+    background-color: #111827;
+
+    color: #8fa1bd;
+
+    font-size: 13px;
+
+    line-height: 1.55;
+}
+
+
+.info-box p {
+    margin: 0 0 8px 0;
+}
+
+
+.info-box p:last-child {
+    margin-bottom: 0;
+}
+
+
+.small-note {
+    margin-top: 18px;
+
+    text-align: center;
+
+    color: #607390;
+
+    font-size: 12px;
+
+    line-height: 1.5;
+}
+
+
+/* Hebrew */
+
+body[dir="rtl"] .input-group {
+    text-align: right;
+}
+
+
+body[dir="rtl"] .input-group input {
+    text-align: right;
+}
+
+
+body[dir="rtl"] .password-box input {
+    padding-right: 15px;
+    padding-left: 70px;
+}
+
+
+body[dir="rtl"] .show-password {
+    right: auto;
+    left: 12px;
+}
+
+
+body[dir="rtl"] .back-link {
+    width: 100%;
+
+    text-align: right;
+}
+
+
+body[dir="rtl"] .login-options {
+    direction: rtl;
+}
+
+
+/* Mobile */
+
+@media (max-width: 500px) {
+
+    .login-box {
+        width: calc(100% - 30px);
+
+        padding: 28px 24px;
+    }
+
+}
