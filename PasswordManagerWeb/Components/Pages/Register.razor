@@ -1,0 +1,419 @@
+@page "/register"
+@rendermode InteractiveServer
+
+@using System.Reflection
+@using PasswordManagerWeb.Services
+
+@inject LanguageService LanguageService
+
+<div class="register-page @(LanguageService.CurrentLanguage == "HE" ? "hebrew" : "")">
+
+    <section class="welcome-section">
+
+        <div class="brand">
+            <div class="brand-logo">◈</div>
+            <span>Password Manager</span>
+        </div>
+
+        <div class="welcome-content">
+
+            <h1>@LanguageService.GetText("mainTitle")</h1>
+
+            <p>@LanguageService.GetText("mainDescription")</p>
+
+        </div>
+
+    </section>
+
+
+    <section class="register-section">
+
+        <div class="settings-area">
+
+            <button
+                type="button"
+                class="settings-button"
+                @onclick="ToggleSettings">
+                ⚙
+            </button>
+
+
+            @if (settingsOpen)
+            {
+                <div class="settings-panel">
+
+                    <div class="settings-title">
+                        @LanguageService.GetText("settings")
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="settings-item"
+                        @onclick="ToggleLanguageMenu">
+
+                        <span class="settings-item-left">
+                            <span class="settings-icon">🌐</span>
+                            @LanguageService.GetText("language")
+                        </span>
+
+                        <span>›</span>
+
+                    </button>
+
+
+                    @if (languageMenuOpen)
+                    {
+                        <div class="settings-submenu">
+
+                            <button
+                                type="button"
+                                class="language-item"
+                                @onclick='() => ChangeLanguage("EN")'>
+
+                                <span>English</span>
+
+                                @if (LanguageService.CurrentLanguage == "EN")
+                                {
+                                    <span class="selected-mark">✓</span>
+                                }
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="language-item"
+                                @onclick='() => ChangeLanguage("HE")'>
+
+                                <span>עברית</span>
+
+                                @if (LanguageService.CurrentLanguage == "HE")
+                                {
+                                    <span class="selected-mark">✓</span>
+                                }
+
+                            </button>
+
+                        </div>
+                    }
+
+
+                    <button
+                        type="button"
+                        class="settings-item"
+                        @onclick="ToggleAppearance">
+
+                        <span class="settings-item-left">
+                            <span class="settings-icon">◐</span>
+                            @LanguageService.GetText("appearance")
+                        </span>
+
+                        <span>›</span>
+
+                    </button>
+
+
+                    @if (appearanceOpen)
+                    {
+                        <div class="settings-submenu">
+
+                            <div class="appearance-item">
+                                <span>@LanguageService.GetText("darkMode")</span>
+                                <span class="selected-mark">✓</span>
+                            </div>
+
+                        </div>
+                    }
+
+
+                    <button
+                        type="button"
+                        class="settings-item"
+                        @onclick="ToggleAbout">
+
+                        <span class="settings-item-left">
+                            <span class="settings-icon">ⓘ</span>
+                            @LanguageService.GetText("about")
+                        </span>
+
+                        <span>›</span>
+
+                    </button>
+
+
+                    @if (aboutOpen)
+                    {
+                        <div class="about-box">
+
+                            <strong>Password Manager</strong>
+
+                            <span>
+                                @LanguageService.GetText("version") @GetAppVersion()
+                            </span>
+
+                            <p>@LanguageService.GetText("aboutText")</p>
+
+                        </div>
+                    }
+
+                </div>
+            }
+
+        </div>
+
+
+        <div class="register-content">
+
+            <h2>@LanguageService.GetText("registerTitle")</h2>
+
+            <p>@LanguageService.GetText("registerDescription")</p>
+
+
+            <label>@LanguageService.GetText("username")</label>
+
+            <input
+                type="text"
+                @bind="username"
+                placeholder="@LanguageService.GetText("usernamePlaceholder")" />
+
+
+            <label>@LanguageService.GetText("email")</label>
+
+            <input
+                type="email"
+                @bind="email"
+                placeholder="@LanguageService.GetText("emailPlaceholder")" />
+
+
+            <label>@LanguageService.GetText("masterPassword")</label>
+
+            <div class="password-field">
+
+                <input
+                    type="@passwordInputType"
+                    @bind="password"
+                    placeholder="@LanguageService.GetText("passwordPlaceholder")" />
+
+                <button
+                    type="button"
+                    class="show-password-button"
+                    @onclick="TogglePassword">
+
+                    @GetPasswordButtonText()
+
+                </button>
+
+            </div>
+
+
+            <label>@LanguageService.GetText("confirmPassword")</label>
+
+            <div class="password-field">
+
+                <input
+                    type="@confirmPasswordInputType"
+                    @bind="confirmPassword"
+                    placeholder="@LanguageService.GetText("confirmPasswordPlaceholder")" />
+
+                <button
+                    type="button"
+                    class="show-password-button"
+                    @onclick="ToggleConfirmPassword">
+
+                    @GetConfirmPasswordButtonText()
+
+                </button>
+
+            </div>
+
+
+            <button
+                class="register-button"
+                @onclick="CreateAccount">
+
+                @LanguageService.GetText("createAccount")
+
+            </button>
+
+
+            <p class="register-message @messageClass">
+                @message
+            </p>
+
+
+            <div class="login-text">
+
+                @LanguageService.GetText("alreadyHaveAccount")
+
+                <a href="/">
+                    @LanguageService.GetText("logIn")
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+@code
+{
+    private string username = "";
+    private string email = "";
+
+    private string password = "";
+    private string confirmPassword = "";
+
+    private string passwordInputType = "password";
+    private string confirmPasswordInputType = "password";
+
+    private string message = "";
+    private string messageClass = "";
+
+    private bool settingsOpen = false;
+    private bool languageMenuOpen = false;
+    private bool appearanceOpen = false;
+    private bool aboutOpen = false;
+
+
+    private string GetAppVersion()
+    {
+        Version? version = Assembly.GetExecutingAssembly().GetName().Version;
+
+        if (version == null)
+        {
+            return "Unknown";
+        }
+
+        return $"{version.Major}.{version.Minor}.{version.Build}";
+    }
+
+
+    private string GetPasswordButtonText()
+    {
+        if (passwordInputType == "password")
+        {
+            return LanguageService.GetText("show");
+        }
+        else
+        {
+            return LanguageService.GetText("hide");
+        }
+    }
+
+
+    private string GetConfirmPasswordButtonText()
+    {
+        if (confirmPasswordInputType == "password")
+        {
+            return LanguageService.GetText("show");
+        }
+        else
+        {
+            return LanguageService.GetText("hide");
+        }
+    }
+
+
+    private void TogglePassword()
+    {
+        if (passwordInputType == "password")
+        {
+            passwordInputType = "text";
+        }
+        else
+        {
+            passwordInputType = "password";
+        }
+    }
+
+
+    private void ToggleConfirmPassword()
+    {
+        if (confirmPasswordInputType == "password")
+        {
+            confirmPasswordInputType = "text";
+        }
+        else
+        {
+            confirmPasswordInputType = "password";
+        }
+    }
+
+
+    private void CreateAccount()
+    {
+        if (username == "" ||
+            email == "" ||
+            password == "" ||
+            confirmPassword == "")
+        {
+            message = LanguageService.GetText("emptyFields");
+            messageClass = "error-message";
+        }
+        else if (password != confirmPassword)
+        {
+            message = LanguageService.GetText("passwordsNotMatch");
+            messageClass = "error-message";
+        }
+        else
+        {
+            message = LanguageService.GetText("accountCreated");
+            messageClass = "success-message";
+        }
+    }
+
+
+    private void ToggleSettings()
+    {
+        settingsOpen = !settingsOpen;
+
+        if (settingsOpen == false)
+        {
+            languageMenuOpen = false;
+            appearanceOpen = false;
+            aboutOpen = false;
+        }
+    }
+
+
+    private void ToggleLanguageMenu()
+    {
+        languageMenuOpen = !languageMenuOpen;
+
+        appearanceOpen = false;
+        aboutOpen = false;
+    }
+
+
+    private void ToggleAppearance()
+    {
+        appearanceOpen = !appearanceOpen;
+
+        languageMenuOpen = false;
+        aboutOpen = false;
+    }
+
+
+    private void ToggleAbout()
+    {
+        aboutOpen = !aboutOpen;
+
+        languageMenuOpen = false;
+        appearanceOpen = false;
+    }
+
+
+    private void ChangeLanguage(string language)
+    {
+        LanguageService.ChangeLanguage(language);
+
+        languageMenuOpen = false;
+
+        message = "";
+        messageClass = "";
+    }
+}
