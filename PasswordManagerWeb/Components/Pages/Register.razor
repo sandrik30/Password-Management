@@ -1,10 +1,15 @@
 @page "/register"
+
 @rendermode InteractiveServer
 
 @using System.Reflection
+@using System.Security.Cryptography
+@using System.Text
+@using Npgsql
 @using PasswordManagerWeb.Services
 
 @inject LanguageService LanguageService
+@inject IConfiguration Configuration
 
 <div class="register-page @(LanguageService.CurrentLanguage == "HE" ? "hebrew" : "")">
 
@@ -16,11 +21,8 @@
         </div>
 
         <div class="welcome-content">
-
             <h1>@LanguageService.GetText("mainTitle")</h1>
-
             <p>@LanguageService.GetText("mainDescription")</p>
-
         </div>
 
     </section>
@@ -262,26 +264,34 @@
 @code
 {
     private string username = "";
+
     private string email = "";
 
     private string password = "";
+
     private string confirmPassword = "";
 
     private string passwordInputType = "password";
+
     private string confirmPasswordInputType = "password";
 
     private string message = "";
+
     private string messageClass = "";
 
     private bool settingsOpen = false;
+
     private bool languageMenuOpen = false;
+
     private bool appearanceOpen = false;
+
     private bool aboutOpen = false;
 
 
     private string GetAppVersion()
     {
-        Version? version = Assembly.GetExecutingAssembly().GetName().Version;
+        Version? version =
+            Assembly.GetExecutingAssembly().GetName().Version;
 
         if (version == null)
         {
@@ -344,7 +354,7 @@
     }
 
 
-    private void CreateAccount()
+    private async Task CreateAccount()
     {
         if (username == "" ||
             email == "" ||
@@ -353,17 +363,97 @@
         {
             message = LanguageService.GetText("emptyFields");
             messageClass = "error-message";
+            return;
         }
-        else if (password != confirmPassword)
+
+
+        if (password != confirmPassword)
         {
             message = LanguageService.GetText("passwordsNotMatch");
             messageClass = "error-message";
+            return;
         }
-        else
+
+
+        string passwordHash = Convert.ToHexString(
+            SHA256.HashData(
+                Encoding.UTF8.GetBytes(password)
+            )
+        );
+
+
+        string connectionString =
+            Configuration.GetConnectionString("PostgreSQL")!;
+
+
+        await using NpgsqlConnection connection =
+            new NpgsqlConnection(connectionString);
+
+        await connection.OpenAsync();
+
+
+        string checkSql =
+            "SELECT COUNT(*) FROM users " +
+            "WHERE username = @username OR email = @email";
+
+
+        await using NpgsqlCommand checkCommand =
+            new NpgsqlCommand(checkSql, connection);
+
+
+        checkCommand.Parameters.AddWithValue(
+            "@username",
+            username
+        );
+
+        checkCommand.Parameters.AddWithValue(
+            "@email",
+            email
+        );
+
+
+        long userCount =
+            (long)(await checkCommand.ExecuteScalarAsync())!;
+
+
+        if (userCount > 0)
         {
-            message = LanguageService.GetText("accountCreated");
-            messageClass = "success-message";
+            message = LanguageService.GetText("userAlreadyExists");
+            messageClass = "error-message";
+            return;
         }
+
+
+        string insertSql =
+            "INSERT INTO users (username, email, password_hash) " +
+            "VALUES (@username, @email, @passwordHash)";
+
+
+        await using NpgsqlCommand insertCommand =
+            new NpgsqlCommand(insertSql, connection);
+
+
+        insertCommand.Parameters.AddWithValue(
+            "@username",
+            username
+        );
+
+        insertCommand.Parameters.AddWithValue(
+            "@email",
+            email
+        );
+
+        insertCommand.Parameters.AddWithValue(
+            "@passwordHash",
+            passwordHash
+        );
+
+
+        await insertCommand.ExecuteNonQueryAsync();
+
+
+        message = LanguageService.GetText("accountCreated");
+        messageClass = "success-message";
     }
 
 

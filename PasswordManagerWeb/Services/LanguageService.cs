@@ -59,6 +59,8 @@ public class LanguageService
 
                 { "alreadyHaveAccount", "Already have an account?" },
                 { "logIn", "Log In" },
+                { "invalidLogin", "Incorrect username or password" },
+                { "userAlreadyExists", "Username or email already exists" },
 
                 { "passwordsNotMatch", "Passwords do not match" },
                 { "accountCreated", "Account created successfully" },
@@ -122,6 +124,8 @@ public class LanguageService
 
                 { "alreadyHaveAccount", "כבר יש לך חשבון?" },
                 { "logIn", "התחבר" },
+                { "invalidLogin", "שם המשתמש או הסיסמה שגויים" },
+                { "userAlreadyExists", "שם המשתמש או כתובת האימייל כבר קיימים" },
 
                 { "passwordsNotMatch", "הסיסמאות אינן תואמות" },
                 { "accountCreated", "החשבון נוצר בהצלחה" },

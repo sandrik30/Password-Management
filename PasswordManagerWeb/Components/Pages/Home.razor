@@ -3,8 +3,12 @@
 
 @using System.Reflection
 @using PasswordManagerWeb.Services
+@using Npgsql
+@using System.Security.Cryptography
+@using System.Text
 
 @inject LanguageService LanguageService
+@inject IConfiguration Configuration
 
 <div class="login-page @(LanguageService.CurrentLanguage == "HE" ? "hebrew" : "")">
 
@@ -284,19 +288,48 @@
             return LanguageService.GetText("hide");
         }
     }
-
-
-    private void Login()
+    private async Task Login()
     {
         if (username == "" || password == "")
         {
             message = LanguageService.GetText("emptyFields");
             messageClass = "error-message";
+            return;
+        }
+
+        string passwordHash = Convert.ToHexString(
+            SHA256.HashData(Encoding.UTF8.GetBytes(password))
+        );
+
+        string connectionString =
+            Configuration.GetConnectionString("PostgreSQL")!;
+
+        await using NpgsqlConnection connection =
+            new NpgsqlConnection(connectionString);
+
+        await connection.OpenAsync();
+
+        string sql =
+            "SELECT COUNT(*) FROM users " +
+            "WHERE username = @username AND password_hash = @passwordHash";
+
+        await using NpgsqlCommand command =
+            new NpgsqlCommand(sql, connection);
+
+        command.Parameters.AddWithValue("@username", username);
+        command.Parameters.AddWithValue("@passwordHash", passwordHash);
+
+        long userCount = (long)(await command.ExecuteScalarAsync())!;
+
+        if (userCount == 1)
+        {
+           message = LanguageService.GetText("loginSuccess");
+           messageClass = "success-message";
         }
         else
         {
-            message = LanguageService.GetText("loginSuccess");
-            messageClass = "success-message";
+            message = LanguageService.GetText("invalidLogin");
+            messageClass = "error-message";
         }
     }
 

@@ -1,3 +1,4 @@
+using Npgsql;
 using PasswordManagerWeb.Components;
 using PasswordManagerWeb.Services;
 
@@ -8,6 +9,18 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 
 builder.Services.AddScoped<LanguageService>();
+
+string connectionString =
+    builder.Configuration.GetConnectionString("PostgreSQL")!;
+
+await using NpgsqlConnection connection =
+    new NpgsqlConnection(connectionString);
+
+await connection.OpenAsync();
+
+Console.WriteLine("Database connection successful!");
+
+await connection.CloseAsync();
 
 var app = builder.Build();
 
