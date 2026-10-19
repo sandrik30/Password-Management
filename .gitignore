@@ -1,3 +1,13 @@
 # .NET build files
 **/bin/
 **/obj/
+
+# IDE files
+.vs/
+.vscode/
+
+# Local configuration and secrets
+**/appsettings.Development.json
+**/secrets.json
+.env
+.env.*
