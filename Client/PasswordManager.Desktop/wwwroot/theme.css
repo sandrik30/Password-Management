@@ -1,0 +1,125 @@
+/* Password Manager v1.5.0 - soft light theme
+   Replace Client/PasswordManager.Desktop/wwwroot/theme.css with this file.
+   All rules are scoped to data-theme="light" so the dark theme is unchanged.
+*/
+
+html[data-theme="light"],
+html[data-theme="light"] body {
+    background: #edf1f7 !important;
+    color: #25354b !important;
+}
+
+/* Maintain the original clean sans-serif typography in both themes. */
+html, body, button, input {
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Two-column layout: soft blue-gray instead of harsh white. */
+html[data-theme="light"] :is(.login-page, .register-page, .forgot-page) {
+    background: #edf1f7 !important;
+    color: #25354b !important;
+}
+
+html[data-theme="light"] .welcome-section {
+    background:
+        radial-gradient(circle at 18% 82%, rgba(85, 133, 204, .10), transparent 41%),
+        radial-gradient(circle at 79% 20%, rgba(113, 125, 185, .07), transparent 43%),
+        #e7edf6 !important;
+}
+
+html[data-theme="light"] :is(.login-section, .register-section, .forgot-section) {
+    background: #f2f5f9 !important;
+    border-color: #d8e0ec !important;
+}
+
+/* Both logos (top-left brand and recovery page icon). */
+html[data-theme="light"] :is(.brand-logo, .recovery-icon) {
+    background: #e0ebfa !important;
+    border: 1px solid #93b9ed !important;
+    color: #346dbb !important;
+    box-shadow: 0 5px 18px rgba(63, 103, 161, .08) !important;
+}
+
+/* Titles, labels, and muted description text. */
+html[data-theme="light"] :is(
+    .brand,
+    .welcome-content h1,
+    .login-content h2,
+    .register-content h2,
+    .forgot-content h2,
+    .login-content label,
+    .register-content label,
+    .forgot-content label
+) {
+    color: #1c2b40 !important;
+}
+
+html[data-theme="light"] :is(
+    .welcome-content p,
+    .login-content > p,
+    .register-content > p,
+    .forgot-content > p,
+    .login-options,
+    .register-text,
+    .login-text,
+    .back-login
+) {
+    color: #526681 !important;
+}
+
+/* Inputs are slightly tinted to avoid bright white rectangles. */
+html[data-theme="light"] :is(
+    .login-content input,
+    .register-content input,
+    .forgot-content input,
+    .password-field input
+) {
+    background: #f9fbfe !important;
+    color: #20314a !important;
+    border-color: #c8d4e4 !important;
+}
+
+html[data-theme="light"] input::placeholder {
+    color: #7689a3 !important;
+}
+
+html[data-theme="light"] :is(input:focus, button:focus-visible) {
+    outline-color: #75a1e6;
+}
+
+/* Softened gradient: still recognizable as Password Manager. */
+html[data-theme="light"] :is(.login-button, .register-button, .recovery-button) {
+    background: linear-gradient(100deg, #467ed8, #646bd0) !important;
+    color: #ffffff !important;
+    box-shadow: 0 6px 16px rgba(73, 105, 177, .13);
+}
+
+/* Shared Settings menu, including About. */
+html[data-theme="light"] .settings-button {
+    background: #e8eef7 !important;
+    border-color: #c6d4e8 !important;
+    color: #294b78 !important;
+}
+
+html[data-theme="light"] .settings-panel {
+    background: #f4f7fb !important;
+    border-color: #cbd7e7 !important;
+    box-shadow: 0 16px 40px rgba(40, 59, 92, .13) !important;
+}
+
+html[data-theme="light"] :is(.settings-title, .about-box strong) {
+    color: #243750 !important;
+}
+
+html[data-theme="light"] :is(.settings-item, .language-item, .appearance-item, .about-box) {
+    color: #415671 !important;
+}
+
+html[data-theme="light"] :is(.settings-submenu, .about-box) {
+    background: #eaf0f8 !important;
+}
+
+html[data-theme="light"] :is(.settings-item:hover, .language-item:hover, .theme-choice:hover) {
+    background: #dfe8f5 !important;
+    color: #213b60 !important;
+}

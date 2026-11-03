@@ -1,0 +1,12 @@
+@namespace PasswordManager.UI
+@using Microsoft.AspNetCore.Components.Routing
+@using PasswordManager.UI.Pages
+
+<Router AppAssembly="@typeof(Login).Assembly">
+    <Found Context="routeData">
+        <RouteView RouteData="@routeData" />
+    </Found>
+    <NotFound>
+        <p style="padding:24px;color:white">Page not found.</p>
+    </NotFound>
+</Router>

@@ -1,0 +1,247 @@
+/* SETTINGS */
+
+.settings-area {
+    position: absolute;
+
+    top: 32px;
+    right: 36px;
+
+    z-index: 10;
+}
+
+
+.settings-button {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    border: 1px solid #344664;
+    border-radius: 11px;
+
+    background: #171E2E;
+
+    color: #AFC0D8;
+
+    font-size: 20px;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+}
+
+
+.settings-button:hover {
+    border-color: #3B82F6;
+
+    color: #FFFFFF;
+
+    background: #1B2639;
+}
+
+
+.settings-panel {
+    width: 260px;
+
+    position: absolute;
+
+    top: 52px;
+    right: 0;
+
+    padding: 8px;
+
+    border: 1px solid #344664;
+    border-radius: 13px;
+
+    background: #141C2B;
+
+    box-shadow:
+        0 18px 45px rgba(0, 0, 0, 0.35);
+}
+
+
+.settings-title {
+    padding: 9px 10px 12px;
+
+    color: #F1F5F9;
+
+    font-size: 15px;
+    font-weight: bold;
+}
+
+
+.settings-item {
+    width: 100%;
+
+    padding: 11px 10px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border: none;
+    border-radius: 8px;
+
+    background: transparent;
+
+    color: #A9B7CA;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition: 0.15s;
+}
+
+
+.settings-item:hover {
+    background: #1B273A;
+
+    color: #FFFFFF;
+}
+
+
+.settings-item-left {
+    display: flex;
+    align-items: center;
+
+    gap: 10px;
+}
+
+
+.settings-icon {
+    width: 20px;
+
+    text-align: center;
+}
+
+
+/* SETTINGS SUBMENU */
+
+.settings-submenu {
+    margin: 2px 0 5px;
+
+    padding: 5px;
+
+    border-radius: 8px;
+
+    background: #101725;
+}
+
+
+.language-item {
+    width: 100%;
+
+    padding: 9px 10px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border: none;
+    border-radius: 7px;
+
+    background: transparent;
+
+    color: #98A8BE;
+
+    font-size: 13px;
+
+    cursor: pointer;
+
+    transition: 0.15s;
+}
+
+
+.language-item:hover {
+    background: #1A2639;
+
+    color: #FFFFFF;
+}
+
+
+.appearance-item {
+    padding: 9px 10px;
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    color: #98A8BE;
+
+    font-size: 13px;
+}
+
+
+.selected-mark {
+    color: #60A5FA;
+
+    font-weight: bold;
+}
+
+
+/* ABOUT */
+
+.about-box {
+    margin: 2px 0 5px;
+
+    padding: 12px;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 5px;
+
+    border-radius: 8px;
+
+    background: #101725;
+
+    color: #92A3BA;
+
+    font-size: 12px;
+}
+
+
+.about-box strong {
+    color: #E2E8F0;
+
+    font-size: 13px;
+}
+
+
+.about-box p {
+    margin: 5px 0 0;
+
+    line-height: 1.5;
+}
+
+
+
+.settings-area[dir="rtl"] .settings-panel {
+    direction: rtl;
+    text-align: right;
+}
+
+@media (max-width: 900px) {
+    .settings-area { top: 22px; right: 25px; }
+}
+@media (max-width: 500px) {
+    .settings-panel { width: 235px; }
+}
+
+/* Buttons in the Appearance submenu */
+.theme-choice {
+    width: 100%;
+    border: 0;
+    border-radius: 7px;
+    background: transparent;
+    text-align: start;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: inherit;
+}
+.theme-choice:hover { background: #1A2639; }

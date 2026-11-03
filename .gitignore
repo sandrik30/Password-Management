@@ -11,3 +11,10 @@
 **/secrets.json
 .env
 .env.*
+# Temporary files and backups
+*.bak
+*.backup
+*.tmp
+*.zip
+*.log
+*.backup.css

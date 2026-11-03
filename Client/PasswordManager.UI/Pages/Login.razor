@@ -1,0 +1,246 @@
+@using PasswordManager.UI.Components
+@namespace PasswordManager.UI.Pages
+@using Microsoft.AspNetCore.Components.Web
+@page "/"
+
+@using System.Reflection
+@using PasswordManager.UI.Services
+
+@inject LanguageService LanguageService
+
+<div class="login-page @(LanguageService.CurrentLanguage == "HE" ? "hebrew" : "")">
+
+    <section class="welcome-section">
+
+        <div class="brand">
+            <div class="brand-logo">◈</div>
+            <span>Password Manager</span>
+        </div>
+
+        <div class="welcome-content">
+
+            <h1>@LanguageService.GetText("mainTitle")</h1>
+
+            <p>@LanguageService.GetText("mainDescription")</p>
+
+        </div>
+
+    </section>
+
+
+    <section class="login-section">
+
+        <SettingsMenu OnLanguageChanged="RefreshLanguage" />
+
+
+
+
+        <div class="login-content">
+
+            <h2>@LanguageService.GetText("welcome")</h2>
+
+            <p>@LanguageService.GetText("loginDescription")</p>
+
+
+            <label>@LanguageService.GetText("username")</label>
+
+            <input
+                type="text"
+                @bind="username"
+                placeholder="@LanguageService.GetText("usernamePlaceholder")" />
+
+
+            <label>@LanguageService.GetText("masterPassword")</label>
+
+            <div class="password-field">
+
+                <input
+                    type="@passwordInputType"
+                    @bind="password"
+                    placeholder="@LanguageService.GetText("passwordPlaceholder")" />
+
+                <button
+                    type="button"
+                    class="show-password-button"
+                    @onclick="TogglePassword">
+
+                    @GetPasswordButtonText()
+
+                </button>
+
+            </div>
+
+
+            <div class="login-options">
+
+                <label>
+                    <input type="checkbox" />
+                    @LanguageService.GetText("rememberMe")
+                </label>
+
+                <a href="/forgot-password">
+                    @LanguageService.GetText("forgotPassword")
+                </a>
+
+            </div>
+
+
+            <button
+                class="login-button"
+                @onclick="HandleLogin">
+
+                @LanguageService.GetText("loginButton")
+
+            </button>
+
+
+            <p class="login-message @messageClass">
+                @message
+            </p>
+
+
+            <div class="register-text">
+
+                @LanguageService.GetText("noAccount")
+
+                <a href="/register">
+                    @LanguageService.GetText("signUp")
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+@code
+{
+    private string username = "";
+    private string password = "";
+
+    private string message = "";
+    private string messageClass = "";
+
+    private string passwordInputType = "password";
+
+    private bool settingsOpen = false;
+    private bool languageMenuOpen = false;
+    private bool appearanceOpen = false;
+    private bool aboutOpen = false;
+
+
+    private string GetAppVersion()
+    {
+        Version? version = Assembly.GetEntryAssembly()?.GetName().Version;
+
+        if (version == null)
+        {
+            return "Unknown";
+        }
+
+        return $"{version.Major}.{version.Minor}.{version.Build}";
+    }
+
+
+    private string GetPasswordButtonText()
+    {
+        if (passwordInputType == "password")
+        {
+            return LanguageService.GetText("show");
+        }
+        else
+        {
+            return LanguageService.GetText("hide");
+        }
+    }
+    // UI-only stage: authentication is added through TCP in the next stage.
+   // UI-only stage: authentication will be connected through TCP later.
+    private void HandleLogin()
+    {
+        if (string.IsNullOrWhiteSpace(username) ||
+            string.IsNullOrWhiteSpace(password))
+        {
+            message = LanguageService.GetText("emptyFields");
+            messageClass = "error-message";
+            return;
+        }
+
+        message = LanguageService.CurrentLanguage == "HE"
+            ? "התחברות לשרת TCP תתווסף בשלב הבא."
+            : "TCP login will be connected in the next stage.";
+
+        messageClass = "";
+    }
+
+    private void TogglePassword()
+    {
+        if (passwordInputType == "password")
+        {
+            passwordInputType = "text";
+        }
+        else
+        {
+            passwordInputType = "password";
+        }
+    }
+
+
+    private void ToggleSettings()
+    {
+        settingsOpen = !settingsOpen;
+
+        if (settingsOpen == false)
+        {
+            languageMenuOpen = false;
+            appearanceOpen = false;
+            aboutOpen = false;
+        }
+    }
+
+
+    private void ToggleLanguageMenu()
+    {
+        languageMenuOpen = !languageMenuOpen;
+
+        appearanceOpen = false;
+        aboutOpen = false;
+    }
+
+
+    private void ToggleAppearance()
+    {
+        appearanceOpen = !appearanceOpen;
+
+        languageMenuOpen = false;
+        aboutOpen = false;
+    }
+
+
+    private void ToggleAbout()
+    {
+        aboutOpen = !aboutOpen;
+
+        languageMenuOpen = false;
+        appearanceOpen = false;
+    }
+
+
+    private void ChangeLanguage(string language)
+    {
+        LanguageService.ChangeLanguage(language);
+
+        languageMenuOpen = false;
+
+        message = "";
+        messageClass = "";
+    }
+
+    private void RefreshLanguage()
+    {
+        message = "";
+        messageClass = "";
+    }
+}

@@ -1,0 +1,304 @@
+@using PasswordManager.UI.Components
+@namespace PasswordManager.UI.Pages
+@using Microsoft.AspNetCore.Components.Web
+@page "/register"
+
+@using System.Reflection
+@using PasswordManager.UI.Services
+
+@inject LanguageService LanguageService
+<div class="register-page @(LanguageService.CurrentLanguage == "HE" ? "hebrew" : "")">
+
+    <section class="welcome-section">
+
+        <div class="brand">
+            <div class="brand-logo">◈</div>
+            <span>Password Manager</span>
+        </div>
+
+        <div class="welcome-content">
+            <h1>@LanguageService.GetText("mainTitle")</h1>
+            <p>@LanguageService.GetText("mainDescription")</p>
+        </div>
+
+    </section>
+
+
+    <section class="register-section">
+
+        <SettingsMenu OnLanguageChanged="RefreshLanguage" />
+
+
+
+
+        <div class="register-content">
+
+            <h2>@LanguageService.GetText("registerTitle")</h2>
+
+            <p>@LanguageService.GetText("registerDescription")</p>
+
+
+            <label>@LanguageService.GetText("username")</label>
+
+            <input
+                type="text"
+                @bind="username"
+                placeholder="@LanguageService.GetText("usernamePlaceholder")" />
+
+
+            <label>@LanguageService.GetText("email")</label>
+
+            <input
+                type="email"
+                @bind="email"
+                placeholder="@LanguageService.GetText("emailPlaceholder")" />
+
+
+            <label>@LanguageService.GetText("masterPassword")</label>
+
+            <div class="password-field">
+
+                <input
+                    type="@passwordInputType"
+                    @bind="password"
+                    placeholder="@LanguageService.GetText("passwordPlaceholder")" />
+
+                <button
+                    type="button"
+                    class="show-password-button"
+                    @onclick="TogglePassword">
+
+                    @GetPasswordButtonText()
+
+                </button>
+
+            </div>
+
+
+            <label>@LanguageService.GetText("confirmPassword")</label>
+
+            <div class="password-field">
+
+                <input
+                    type="@confirmPasswordInputType"
+                    @bind="confirmPassword"
+                    placeholder="@LanguageService.GetText("confirmPasswordPlaceholder")" />
+
+                <button
+                    type="button"
+                    class="show-password-button"
+                    @onclick="ToggleConfirmPassword">
+
+                    @GetConfirmPasswordButtonText()
+
+                </button>
+
+            </div>
+
+
+            <button
+                class="register-button"
+                @onclick="CreateAccount">
+
+                @LanguageService.GetText("createAccount")
+
+            </button>
+
+
+            <p class="register-message @messageClass">
+                @message
+            </p>
+
+
+            <div class="login-text">
+
+                @LanguageService.GetText("alreadyHaveAccount")
+
+                <a href="/">
+                    @LanguageService.GetText("logIn")
+                </a>
+
+            </div>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+@code
+{
+    private string username = "";
+
+    private string email = "";
+
+    private string password = "";
+
+    private string confirmPassword = "";
+
+    private string passwordInputType = "password";
+
+    private string confirmPasswordInputType = "password";
+
+    private string message = "";
+
+    private string messageClass = "";
+
+    private bool settingsOpen = false;
+
+    private bool languageMenuOpen = false;
+
+    private bool appearanceOpen = false;
+
+    private bool aboutOpen = false;
+
+
+    private string GetAppVersion()
+    {
+        Version? version =
+            Assembly.GetEntryAssembly()?.GetName().Version;
+
+        if (version == null)
+        {
+            return "Unknown";
+        }
+
+        return $"{version.Major}.{version.Minor}.{version.Build}";
+    }
+
+
+    private string GetPasswordButtonText()
+    {
+        if (passwordInputType == "password")
+        {
+            return LanguageService.GetText("show");
+        }
+        else
+        {
+            return LanguageService.GetText("hide");
+        }
+    }
+
+
+    private string GetConfirmPasswordButtonText()
+    {
+        if (confirmPasswordInputType == "password")
+        {
+            return LanguageService.GetText("show");
+        }
+        else
+        {
+            return LanguageService.GetText("hide");
+        }
+    }
+
+
+    private void TogglePassword()
+    {
+        if (passwordInputType == "password")
+        {
+            passwordInputType = "text";
+        }
+        else
+        {
+            passwordInputType = "password";
+        }
+    }
+
+
+    private void ToggleConfirmPassword()
+    {
+        if (confirmPasswordInputType == "password")
+        {
+            confirmPasswordInputType = "text";
+        }
+        else
+        {
+            confirmPasswordInputType = "password";
+        }
+    }
+
+
+    // UI-only: do not send registration data until TCP is connected.
+    private void CreateAccount()
+    {
+        if (string.IsNullOrWhiteSpace(username) ||
+            string.IsNullOrWhiteSpace(email) ||
+            string.IsNullOrWhiteSpace(password) ||
+            string.IsNullOrWhiteSpace(confirmPassword))
+        {
+            message = LanguageService.GetText("emptyFields");
+            messageClass = "error-message";
+            return;
+        }
+
+        if (password != confirmPassword)
+        {
+            message = LanguageService.GetText("passwordsNotMatch");
+            messageClass = "error-message";
+            return;
+        }
+
+        message = LanguageService.CurrentLanguage == "HE"
+            ? "הרשמה דרך TCP תחובר בהמשך. החשבון עדיין לא נוצר."
+            : "TCP registration is not connected yet. No account was created.";
+        messageClass = "";
+    }
+
+    private void ToggleSettings()
+    {
+        settingsOpen = !settingsOpen;
+
+        if (settingsOpen == false)
+        {
+            languageMenuOpen = false;
+            appearanceOpen = false;
+            aboutOpen = false;
+        }
+    }
+
+
+    private void ToggleLanguageMenu()
+    {
+        languageMenuOpen = !languageMenuOpen;
+
+        appearanceOpen = false;
+        aboutOpen = false;
+    }
+
+
+    private void ToggleAppearance()
+    {
+        appearanceOpen = !appearanceOpen;
+
+        languageMenuOpen = false;
+        aboutOpen = false;
+    }
+
+
+    private void ToggleAbout()
+    {
+        aboutOpen = !aboutOpen;
+
+        languageMenuOpen = false;
+        appearanceOpen = false;
+    }
+
+
+    private void ChangeLanguage(string language)
+    {
+        LanguageService.ChangeLanguage(language);
+
+        languageMenuOpen = false;
+
+        message = "";
+        messageClass = "";
+    }
+
+    private void RefreshLanguage()
+    {
+        message = "";
+        messageClass = "";
+    }
+}
