@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Password Manager</title>
+
+    <base href="/" />
+
+    <link href="PasswordManager.Desktop.styles.css" rel="stylesheet" />
+
+    <style>
+        html, body {
+            margin: 0;
+            width: 100%;
+            min-height: 100%;
+            background: #0B0F19;
+        }
+    </style>
+  <link href="theme.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div id="app">Loading...</div>
+
+    <script src="_framework/blazor.webview.js"></script>
+  <script>
+    window.passwordManagerTheme = {
+      set: function (theme) {
+        document.documentElement.setAttribute("data-theme", theme === "light" ? "light" : "dark");
+      }
+    };
+  </script>
+</body>
+
+</html>

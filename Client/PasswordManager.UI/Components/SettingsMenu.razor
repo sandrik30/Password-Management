@@ -1,0 +1,223 @@
+@namespace PasswordManager.UI.Components
+@using System.Reflection
+@using Microsoft.AspNetCore.Components
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.JSInterop
+@using PasswordManager.UI.Services
+@inject LanguageService LanguageService
+@inject ThemeService ThemeService
+@inject IJSRuntime JS
+
+        <div class="settings-area" dir="@(LanguageService.CurrentLanguage == "HE" ? "rtl" : "ltr")">
+
+            <button
+                type="button"
+                class="settings-button"
+                @onclick="ToggleSettings">
+                ⚙
+            </button>
+
+
+            @if (settingsOpen)
+            {
+                <div class="settings-panel">
+
+                    <div class="settings-title">
+                        @LanguageService.GetText("settings")
+                    </div>
+
+
+                    <button
+                        type="button"
+                        class="settings-item"
+                        @onclick="ToggleLanguageMenu">
+
+                        <span class="settings-item-left">
+                            <span class="settings-icon">🌐</span>
+                            @LanguageService.GetText("language")
+                        </span>
+
+                        <span>›</span>
+
+                    </button>
+
+
+                    @if (languageMenuOpen)
+                    {
+                        <div class="settings-submenu">
+
+                            <button
+                                type="button"
+                                class="language-item"
+                                @onclick='() => SetLanguage("EN")'>
+
+                                <span>English</span>
+
+                                @if (LanguageService.CurrentLanguage == "EN")
+                                {
+                                    <span class="selected-mark">✓</span>
+                                }
+
+                            </button>
+
+
+                            <button
+                                type="button"
+                                class="language-item"
+                                @onclick='() => SetLanguage("HE")'>
+
+                                <span>עברית</span>
+
+                                @if (LanguageService.CurrentLanguage == "HE")
+                                {
+                                    <span class="selected-mark">✓</span>
+                                }
+
+                            </button>
+
+                        </div>
+                    }
+
+
+                    <button
+                        type="button"
+                        class="settings-item"
+                        @onclick="ToggleAppearance">
+
+                        <span class="settings-item-left">
+                            <span class="settings-icon">◐</span>
+                            @LanguageService.GetText("appearance")
+                        </span>
+
+                        <span>›</span>
+
+                    </button>
+
+
+                    @if (appearanceOpen)
+                    {
+                        <div class="settings-submenu">
+
+                                                        <button type="button" class="appearance-item theme-choice"
+                                    @onclick='() => SetTheme("dark")'>
+                                <span>@LanguageService.GetText("darkMode")</span>
+                                @if (ThemeService.CurrentTheme == "dark")
+                                {
+                                    <span class="selected-mark">✓</span>
+                                }
+                            </button>
+
+                            <button type="button" class="appearance-item theme-choice"
+                                    @onclick='() => SetTheme("light")'>
+                                <span>@(LanguageService.CurrentLanguage == "HE" ? "מצב בהיר" : "Light mode")</span>
+                                @if (ThemeService.CurrentTheme == "light")
+                                {
+                                    <span class="selected-mark">✓</span>
+                                }
+                            </button>
+
+                        </div>
+                    }
+
+
+                    <button
+                        type="button"
+                        class="settings-item"
+                        @onclick="ToggleAbout">
+
+                        <span class="settings-item-left">
+                            <span class="settings-icon">ⓘ</span>
+                            @LanguageService.GetText("about")
+                        </span>
+
+                        <span>›</span>
+
+                    </button>
+
+
+                    @if (aboutOpen)
+                    {
+                        <div class="about-box">
+
+                            <strong>Password Manager</strong>
+
+                            <span>
+                                @LanguageService.GetText("version") @GetAppVersion()
+                            </span>
+
+                            <p>@LanguageService.GetText("aboutText")</p>
+
+                        </div>
+                    }
+
+                </div>
+            }
+
+        </div>
+
+@code {
+    [Parameter] public EventCallback OnLanguageChanged { get; set; }
+
+    private bool settingsOpen;
+    private bool languageMenuOpen;
+    private bool appearanceOpen;
+    private bool aboutOpen;
+
+    private string GetAppVersion()
+    {
+        var version = Assembly.GetEntryAssembly()?.GetName().Version;
+        return version == null ? "Unknown" : $"{version.Major}.{version.Minor}.{version.Build}";
+    }
+
+    private void ToggleSettings()
+    {
+        settingsOpen = !settingsOpen;
+        if (!settingsOpen)
+        {
+            languageMenuOpen = false;
+            appearanceOpen = false;
+            aboutOpen = false;
+        }
+    }
+
+    private void ToggleLanguageMenu()
+    {
+        languageMenuOpen = !languageMenuOpen;
+        appearanceOpen = false;
+        aboutOpen = false;
+    }
+
+    private void ToggleAppearance()
+    {
+        appearanceOpen = !appearanceOpen;
+        languageMenuOpen = false;
+        aboutOpen = false;
+    }
+
+    private void ToggleAbout()
+    {
+        aboutOpen = !aboutOpen;
+        languageMenuOpen = false;
+        appearanceOpen = false;
+    }
+
+    private async Task SetLanguage(string language)
+    {
+        LanguageService.ChangeLanguage(language);
+        languageMenuOpen = false;
+        await OnLanguageChanged.InvokeAsync();
+    }
+    private async Task SetTheme(string theme)
+    {
+        ThemeService.SetTheme(theme);
+        await JS.InvokeVoidAsync("passwordManagerTheme.set", theme);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            await JS.InvokeVoidAsync("passwordManagerTheme.set", ThemeService.CurrentTheme);
+        }
+    }
+}
