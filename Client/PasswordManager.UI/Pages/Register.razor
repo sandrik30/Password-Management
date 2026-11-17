@@ -1,3 +1,4 @@
+@inject PasswordManager.ClientCore.TcpClientService TcpClient
 @using PasswordManager.UI.Components
 @namespace PasswordManager.UI.Pages
 @using Microsoft.AspNetCore.Components.Web
@@ -221,29 +222,38 @@
 
 
     // UI-only: do not send registration data until TCP is connected.
-    private void CreateAccount()
+    private async Task CreateAccount()
     {
-        if (string.IsNullOrWhiteSpace(username) ||
-            string.IsNullOrWhiteSpace(email) ||
-            string.IsNullOrWhiteSpace(password) ||
-            string.IsNullOrWhiteSpace(confirmPassword))
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(email) ||
+            string.IsNullOrWhiteSpace(password) || string.IsNullOrWhiteSpace(confirmPassword))
         {
             message = LanguageService.GetText("emptyFields");
             messageClass = "error-message";
             return;
         }
-
         if (password != confirmPassword)
         {
             message = LanguageService.GetText("passwordsNotMatch");
             messageClass = "error-message";
             return;
         }
-
-        message = LanguageService.CurrentLanguage == "HE"
-            ? "הרשמה דרך TCP תחובר בהמשך. החשבון עדיין לא נוצר."
-            : "TCP registration is not connected yet. No account was created.";
-        messageClass = "";
+        try
+        {
+            string result = await TcpClient.RegisterAsync(username, email, password);
+            message = result switch
+            {
+                "accountCreated" => LanguageService.CurrentLanguage == "HE" ? "Ч”Ч—Ч©Ч‘Ч•Чџ Ч Ч•Ч¦ЧЁ Ч‘Ч”Ч¦ЧњЧ—Ч”!" : "Account created successfully!",
+                "userAlreadyExists" => LanguageService.CurrentLanguage == "HE" ? "Ч©Чќ Ч”ЧћЧ©ЧЄЧћЧ© ЧђЧ• Ч”ЧђЧ™ЧћЧ™Ч™Чњ Ч›Ч‘ЧЁ Ч§Ч™Ч™ЧћЧ™Чќ" : "Username or email already exists.",
+                "emptyFields" => LanguageService.GetText("emptyFields"),
+                _ => LanguageService.CurrentLanguage == "HE" ? "Ч©Ч’Ч™ЧђЧЄ Ч©ЧЁЧЄ: " + result : "Server error: " + result
+            };
+            messageClass = result == "accountCreated" ? "success-message" : "error-message";
+        }
+        catch (Exception ex) when (ex is System.Net.Sockets.SocketException or IOException or OperationCanceledException)
+        {
+            message = LanguageService.CurrentLanguage == "HE" ? "ЧњЧђ Ч Ч™ЧЄЧџ ЧњЧ”ЧЄЧ—Ч‘ЧЁ ЧњЧ©ЧЁЧЄ" : "Cannot connect to TCP server.";
+            messageClass = "error-message";
+        }
     }
 
     private void ToggleSettings()
