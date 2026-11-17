@@ -13,6 +13,7 @@ public partial class App : Application
     {
         var services = new ServiceCollection();
         services.AddWpfBlazorWebView();
+        services.AddSingleton<PasswordManager.ClientCore.TcpClientService>();
         services.AddSingleton<LanguageService>();
         services.AddSingleton<ThemeService>();
         Services = services.BuildServiceProvider();

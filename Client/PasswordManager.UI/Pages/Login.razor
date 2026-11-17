@@ -1,3 +1,4 @@
+@inject PasswordManager.ClientCore.TcpClientService TcpClient
 @using PasswordManager.UI.Components
 @namespace PasswordManager.UI.Pages
 @using Microsoft.AspNetCore.Components.Web
@@ -158,21 +159,31 @@
     }
     // UI-only stage: authentication is added through TCP in the next stage.
    // UI-only stage: authentication will be connected through TCP later.
-    private void HandleLogin()
+    private async Task HandleLogin()
     {
-        if (string.IsNullOrWhiteSpace(username) ||
-            string.IsNullOrWhiteSpace(password))
+        if (string.IsNullOrWhiteSpace(username) || string.IsNullOrWhiteSpace(password))
         {
             message = LanguageService.GetText("emptyFields");
             messageClass = "error-message";
             return;
         }
-
-        message = LanguageService.CurrentLanguage == "HE"
-            ? "התחברות לשרת TCP תתווסף בשלב הבא."
-            : "TCP login will be connected in the next stage.";
-
-        messageClass = "";
+        try
+        {
+            string result = await TcpClient.LoginAsync(username, password);
+            message = result switch
+            {
+                "loginSuccess" => LanguageService.CurrentLanguage == "HE" ? "Ч”ЧЄЧ—Ч‘ЧЁЧЄ Ч‘Ч”Ч¦ЧњЧ—Ч”!" : "Login successful!",
+                "invalidLogin" => LanguageService.CurrentLanguage == "HE" ? "Ч©Чќ ЧћЧ©ЧЄЧћЧ© ЧђЧ• ЧЎЧ™ЧЎЧћЧ” Ч©Ч’Ч•Ч™Ч™Чќ" : "Incorrect username or password.",
+                "emptyFields" => LanguageService.GetText("emptyFields"),
+                _ => LanguageService.CurrentLanguage == "HE" ? "Ч©Ч’Ч™ЧђЧЄ Ч©ЧЁЧЄ: " + result : "Server error: " + result
+            };
+            messageClass = result == "loginSuccess" ? "success-message" : "error-message";
+        }
+        catch (Exception ex) when (ex is System.Net.Sockets.SocketException or IOException or OperationCanceledException)
+        {
+            message = LanguageService.CurrentLanguage == "HE" ? "ЧњЧђ Ч Ч™ЧЄЧџ ЧњЧ”ЧЄЧ—Ч‘ЧЁ ЧњЧ©ЧЁЧЄ" : "Cannot connect to TCP server.";
+            messageClass = "error-message";
+        }
     }
 
     private void TogglePassword()
